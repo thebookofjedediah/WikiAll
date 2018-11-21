@@ -33,11 +33,13 @@ describe("routes : users", () => {
 				form: {
 					name: "Test User",
 					email: "test@example.com",
-					password: "1111111111"
+					password: "1111111111",
+					confirmPassword: "1111111111"
 				}
 			}
 
 			request.post(options, (err, res, body) => {
+				console.log(body);
 				User.findOne({where: {email: "test@example.com"}})
 				.then((user) => {
 					expect(user).not.toBeNull();
@@ -59,7 +61,8 @@ describe("routes : users", () => {
                		form: {
                   		name: "whoever",
                   		email:"email",
-                  		password:"1111111111"
+                  		password:"1111111111",
+                  		confirmPassword: "1111111111"
                		}
 				},
             	(err, res, body) => {
