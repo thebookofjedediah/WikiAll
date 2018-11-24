@@ -34,5 +34,25 @@ module.exports = {
 				})
 			}
 		});
+	},
+	signInForm(req, res, next){
+		res.render("users/signin")
+	},
+	signIn(req, res, next){
+		passport.authenticate("local")(req, res, () => {
+			if(!req.user){
+				req.flash("notice", "Sign in failed");
+				res.redirect("/users/signin");
+			} else {
+				req.flash("notice", "You have successfully signed in!");
+				req.redirect("/");
+			}
+		})
+	},
+	signOut(req, res, next){
+		req.logout();
+		req.flash("notice", "You have successfully signed out");
+		res.redirect("/");
 	}
+
 }
