@@ -19,7 +19,7 @@ module.exports = {
 				req.flash("error", err);
 				res.redirect("/users/signup");
 			} else {
-				passport.authenticate("local")(req, res, () => {
+				passport.authenticate("local")(req, res, function() {
 					req.flash("notice", "You have successfully signed in!");
 					sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 					const msg = {
@@ -39,7 +39,7 @@ module.exports = {
 		res.render("users/signin")
 	},
 	signIn(req, res, next){
-		passport.authenticate("local")(req, res, () => {
+		passport.authenticate("local")(req, res, function() {
 			if(!req.user){
 				req.flash("notice", "Sign in failed");
 				res.redirect("/users/signin");
