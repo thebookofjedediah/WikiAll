@@ -39,15 +39,22 @@ module.exports = {
 		res.render("users/signin")
 	},
 	signIn(req, res, next){
-		passport.authenticate("local")(req, res, function() {
-			if(!req.user){
-				req.flash("notice", "Sign in failed");
-				res.redirect("/users/signin");
-			} else {
-				req.flash("notice", "You have successfully signed in!");
-				req.redirect("/");
-			}
-		})
+  		passport.authenticate("local", function (err, user, info) {
+    		if (err) {
+      			next(err);
+    		}
+    		if (!user) {
+      			req.flash("notice", "Error: The email or password you entered is incorrect.")
+      			res.redirect("/users/signin");
+    		}
+    		req.logIn(user, function (err) {
+      			if (err) {
+        			next(err);
+     			}
+      			req.flash("notice", "You've successfully signed in!");
+      			res.redirect("/");
+    		});
+  		})(req, res, next);
 	},
 	signOut(req, res, next){
 		req.logout();
