@@ -55,22 +55,23 @@ describe("routes : wikis", () => {
 		});
 	});
 
-	describe("POST /wikis/create", () => {
-		const options = {
-			url: `${base}create`,
-			form: {
-				title: "Spikeball",
-				body: "The all American sport",
-				userId: this.user.id
-			}
-		};
+	describe("GET /wikis/create", () => {
 		it("should create a new wiki and redirect", (done) => {
+			const options = {
+				url: `${base}create`,
+				form: {
+					title: "Spikeball",
+					body: "The all American sport",
+					userId: this.user.id
+				}
+			};
+		
 			request.post(options, (err, res, body) => {
 				console.log(res.statusMessage);
 				Wiki.findOne({where: {title: "Spikeball"}})
 				.then((wiki) => {
-					expect(this.wiki.title).toBe("Spikeball");
-					expect(this.wiki.body).toBe("The all American sport");
+					expect(wiki.title).toBe("Spikeball");
+					expect(wiki.body).toBe("The all American sport");
 					done();
 				})
 				.catch((err) => {

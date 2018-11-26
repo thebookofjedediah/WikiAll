@@ -29,7 +29,7 @@ module.exports = {
             			text: `Welcome to Blocipedia ${user.name}!`,
             			html: `<strong>Welcome to Blocipedia ${user.name}!</strong>`,
           			};
-          			sgMail.send(msg);
+          			//sgMail.send(msg);
 					res.redirect("/");
 				})
 			}
