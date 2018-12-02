@@ -7,6 +7,19 @@ module.exports = {
 			callback(null, wikis);
 		});
 	},
+   getPublicWikis(callback){
+      return Wiki.all({
+         where: {
+            private: false
+         }
+      })
+      .then((wikis) => {
+         callback(null, wikis);
+      })
+      .catch((err) => {
+         callback(err);
+      });
+   },
 	addWiki(newWiki, callback) {
       	return Wiki.create(newWiki)
       	.then((wiki) => {
@@ -37,21 +50,31 @@ module.exports = {
       	});
    	},
    	updateWiki(req, updatedWiki, callback) {
-      	return Wiki.findById(req.params.id)
-      	.then((wiki) => {
-         	if(!wiki){
-            	return callback("Wiki not found");
-         	}
-         	wiki.update(updatedWiki, {
-            	fields: Object.keys(updatedWiki)
-         	})
-         	.then(() => {
-            	callback(null, wiki);
-         	})
-         	.catch((err) => {
-            	callback(err);
-         	});
-      	})
-   	}
+         return Wiki.findById(req.params.id)
+         .then((wiki) => {
+            if(!wiki){
+               return callback("Wiki not found");
+            }
+            return wiki.update({private: updatedStatus}, {fields:['private']})
+            .then(() => {
+               callback(null, wiki);
+            })
+            .catch((err) => {
+               callback(err);
+            });
+         })
+   	},
+      changeWikiStatus(req, updatedStatus, callback){
+         return Wiki.findById(req.params.id)
+         .then((wiki) => {
+            if(!wiki){
+               return callback("Wiki not found");
+            }
+         })
+         return wiki.update({private: updatedStatus}, {fields:['private']})
+         .then(() => {
+            callback(null, wiki);
+         })
+      },
 
 }
