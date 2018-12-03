@@ -1,4 +1,5 @@
 const User = require("./models").User;
+const Wiki = require("./models").Wiki;
 const bcrypt = require("bcryptjs");
 
 module.exports = {
@@ -27,6 +28,24 @@ module.exports = {
 			callback(err);
 		});
 	},
+	// getUser(id, callback){
+	// 	let result = {};
+	// 	User.findById(id)
+	// 	.then((user) => {
+	// 		if(!user){
+	// 			callback(404);
+	// 		} else {
+	// 			result["user"] = user;
+	// 			Wiki.scope({method: ["lastFiveFor", id]}).all()
+	// 			.then((wikis) => {
+	// 				result["wikis"] = wikis;
+	// 			})
+	// 			.catch((err) => {
+	// 				callback(err);
+	// 			})
+	// 		}
+	// 	});
+	// },
 	updateUserRole(id, updatedRole, callback){
 		return User.findById(id)
 		.then((user) => {

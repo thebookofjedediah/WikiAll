@@ -2,6 +2,8 @@ const userQueries = require("../db/queries.users");
 const passport = require("passport");
 const sgMail = require('@sendgrid/mail');
 const wikiQueries = require("../db/queries.wikis.js");
+const User = require("../db/models/").User;
+const Wiki = require("../db/models/").Wiki;
 
 module.exports = {
 	signUp(req, res, next){
@@ -69,7 +71,7 @@ module.exports = {
 		userQueries.getUser(req.params.id, (err, user) => {
 			if(err || user === null){
 				req.flash("notice", "User not found");
-				req.redirect("/");
+				res.redirect("/");
 			} else {
 				res.render("users/show", {user});
 			}
@@ -96,36 +98,23 @@ module.exports = {
 		})
 	},
 	downgrade(req, res, next){
-    wikiQueries.getAllWikis((err, wikis) => {
-      console.log(wikis);
-      wikis.forEach((wiki) => {
-        if (wiki.userId === user.id) {
-          let updated = {
-            title: wiki.title,
-            body: wiki.body,
-            userId: wiki.userId,
-            private: false,
-            id: wiki.id,
-          }
-          wikiQueries.updateWiki(updated, (err, wiki) => {
-            if (err || wiki == null) {
-                console.log(err);
-                res.redirect(404, "/error");
-              } else {
-                res.render("wiki/wiki", { wiki });
-              }
-        })
-        }
-      })
-    });
-		userQueries.updateUserRole(req.params.id, 0, (err, user) => {
-			if(err || user === null){
-				req.flash("notice", "Unable to downgrade. Please contact support");
-				res.redirect(404, `/users/${req.params.id}`);
-			} else {
-				req.flash("notice", "Your account has been downgraded");
+		User.findById(req.params.id)
+		.then(user => {
+				user.update({ role: 0});
+
+				Wiki.update({    
+   					private: false
+				}, {
+   					where: { 
+      					userId: user.id 
+   					}
+				});
+
+				req.flash("notice", "Account has been downgraded");
 				res.redirect(`/users/${req.params.id}`);
-			}
+		})
+		.catch((err) => {
+			console.log(err);
 		})
 	}
 
