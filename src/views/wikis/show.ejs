@@ -8,13 +8,16 @@
    <main class="container">
      <%- include('../static/partials/messages.ejs') -%>
       <h1><%= wiki.title %></h1>
+     
      <% if (currentUser) { %>
       <a href="/wikis/<%= wiki.id %>/edit" class="btn btn-warning">Edit</a>
+
        <% if(currentUser.id === wiki.userId || currentUser.isAdmin()) { %>
          <form style="display:initial" action="/wikis/<%= wiki.id %>/destroy" method="post">
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
       <% } %>
+
       <% if(currentUser.isPremium() || currentUser.isAdmin()) { %>
         <% if(wiki.private === true) { %>
           <form style="display:initial" action="/wikis/<%= wiki.id %>/public" method="post">
@@ -26,7 +29,8 @@
         </form>
         <% } %>
       <% } %>
-      <% } %>
+    <% } %>
+
       <p><%= wiki.body %></p>
    </main>
    

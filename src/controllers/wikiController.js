@@ -105,7 +105,7 @@ module.exports = {
       },
       makePrivate(req, res, next){
          if(req.user.role == 1 || req.user.role == 2) {
-            wikiQueries.changeWikiStatus(req, true, (err, wiki) => {
+            wikiQueries.updateWikiPrivate(req, true, (err, wiki) => {
                if(err || wiki == null) {
                   res.redirect(404, `/wikis/${wiki.id}`);
                } else {
@@ -123,7 +123,7 @@ module.exports = {
       },
       makePublic(req, res, next){
          if(req.user.role == 1 || req.user.role == 2) {
-            wikiQueries.changeWikiStatus(req, false, (err, wiki) => {
+            wikiQueries.updateWikiPrivate(req, false, (err, wiki) => {
                if(err || wiki == null) {
                res.redirect(404, `/wikis/${wiki.id}`);
                } else {

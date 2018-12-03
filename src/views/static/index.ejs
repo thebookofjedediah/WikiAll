@@ -13,9 +13,15 @@
         <!-- Jumbotron Header -->
         <header class="jumbotron my-4">
           <h1 class="display-3">Welcome to Blocipedia</h1>
+          <% if(currentUser) { %>
+          <p class="lead">Check out our wikis to create, edit, and collaborate!</p>
+          <a href="/wikis" class="btn btn-primary btn-lg">Wikis</a>
+          <% } else { %>
           <p class="lead">An application for users to collaborate on wiki's!.</p>
           <a href="users/signup" class="btn btn-primary btn-lg">Sign up</a>
           <a href="users/signin" class="btn btn-primary btn-lg">Sign in</a>
+          <a href="/wikis" class="btn btn-primary btn-lg">Public Wikis</a>
+          <% } %>
         </header>
 
         <!-- Page Features -->

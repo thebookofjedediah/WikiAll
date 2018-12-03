@@ -8,6 +8,7 @@ for(let i = 0; i <=10; i++){
   wikis.push({
     title: faker.hacker.noun(),
     body: faker.hacker.phrase(),
+    private: false,
     userId: Math.floor(Math.random() * 10),
     createdAt: new Date(),
     updatedAt: new Date()

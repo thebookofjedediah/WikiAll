@@ -7,9 +7,13 @@
     <%- include('../static/partials/navbar.ejs') -%>
      <main class="container">
        <%- include('../static/partials/messages.ejs') -%>
-       <h1><%= `${user.name}'s profile` %></h1>
+       <h1><%= `Hello, ${user.name}!` %></h1>
+       <h3><%= `Your current account type: ${user.role}` %></h3>
       <hr>
-      <h2> Latest Wikis</h2>
+      <h2>Here are your wikis:</h2>
+      <hr>
+
+
       <% if (currentUser.isAdmin() || currentUser.isPremium() ) { %>
       <form style="display:initial" action="/users/<%= currentUser.id %>/downgrade" method="post">
         <button type="submit" class="btn btn-danger">Downgrade to Standard</button>
