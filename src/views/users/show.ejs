@@ -10,9 +10,22 @@
        <h1><%= `Hello, ${user.name}!` %></h1>
        <h3><%= `Your current account type: ${user.role}` %></h3>
       <hr>
+
       <h2>Here are your wikis:</h2>
       <hr>
 
+      <ul class="list-unstyled">
+        <% if(wikis) { %>
+          <% wikis.forEach((wiki) => { %>
+            <li>
+              <a href="/wikis/<%= wiki.topicId %>/wikis/<%= wiki.id %>">
+                <%= wiki.title %>
+              </a>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+      <hr>
 
       <% if (currentUser.isAdmin() || currentUser.isPremium() ) { %>
       <form style="display:initial" action="/users/<%= currentUser.id %>/downgrade" method="post">
