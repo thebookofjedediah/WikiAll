@@ -19,33 +19,26 @@ module.exports = {
 			callback(err);
 		});
 	},
-	// getUser(id, callback){
-	// 	User.findById(id)
-	// 	.then((user) => {
-	// 		callback(null, user);
-	// 	})
-	// 	.catch((err) => {
-	// 		callback(err);
-	// 	});
-	// },
-	getUser(id, callback){
-		let result = {};
-		User.findById(id)
-		.then((user) => {
-			if(!user){
-				callback(404);
-			} else {
-				result["user"] = user;
-				Wiki.scope({method: ["lastFiveFor", id]}).all()
-				.then((wikis) => {
-					result["wikis"] = wikis;
-				})
-				.catch((err) => {
-					callback(err);
-				})
-			}
-		});
-	},
+    getUser(id, callback){
+        let result = {};
+        User.findById(id)
+        .then((user) => {
+            if(!user){
+                callback(404);
+            } else {
+                result["user"] = user;
+                console.log("Set user to " + user.name);
+                Wiki.scope({method: ["lastFiveFor", id]}).all()
+                .then((wikis) => {
+                    result["wikis"] = wikis;
+                    callback(null, result);
+                })
+                .catch((err) => {
+                    callback(err);
+                })
+            }
+        });
+    },
 	updateUserRole(id, updatedRole, callback){
 		return User.findById(id)
 		.then((user) => {

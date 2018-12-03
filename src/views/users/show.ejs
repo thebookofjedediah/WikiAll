@@ -7,18 +7,18 @@
     <%- include('../static/partials/navbar.ejs') -%>
      <main class="container">
        <%- include('../static/partials/messages.ejs') -%>
-       <h1><%= `Hello, ${user.name}!` %></h1>
-       <h3><%= `Your current account type: ${user.role}` %></h3>
+       <h1><%= `Hello, ${currentUser.name}!` %></h1>
+       <h3><%= `Your current account type: ${currentUser.role}` %></h3>
       <hr>
 
-      <h2>Here are your wikis:</h2>
+      <h2>Your recent wikis:</h2>
       <hr>
 
       <ul class="list-unstyled">
-        <% if(wikis) { %>
-          <% wikis.forEach((wiki) => { %>
+        <% if(user.wikis) { %>
+          <% user.wikis.forEach((wiki) => { %>
             <li>
-              <a href="/wikis/<%= wiki.topicId %>/wikis/<%= wiki.id %>">
+              <a href="/wikis/<%= wiki.id %>">
                 <%= wiki.title %>
               </a>
             </li>
@@ -30,6 +30,7 @@
       <% if (currentUser.isAdmin() || currentUser.isPremium() ) { %>
       <form style="display:initial" action="/users/<%= currentUser.id %>/downgrade" method="post">
         <button type="submit" class="btn btn-danger">Downgrade to Standard</button>
+        <small>By downgrading to standard you will be causing all your private wikis to become public.</small>
       </form>
       <% } %> 
       <% if(currentUser.role === 0) { %>
