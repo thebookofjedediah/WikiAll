@@ -5,7 +5,7 @@ const markdown = require( "markdown" ).markdown;
 module.exports = {
 	index(req, res, next){
       if(req.user){
-         if(req.user.role == 1 || req.user.role == 2) {
+         if(req.user.role == 1 || req.user.role == 2 ||) {
             wikiQueries.getAllWikis((err, wikis) => {
                if(err){
                   res.redirect(500, "static/index");

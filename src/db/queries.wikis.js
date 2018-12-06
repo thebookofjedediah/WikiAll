@@ -1,4 +1,6 @@
 const Wiki = require("./models").Wiki;
+const Collaborator = require("./models").Collaborator;
+const User = require("./models").User;
 
 module.exports = {
 	getAllWikis(callback){
@@ -10,7 +12,7 @@ module.exports = {
    getPublicWikis(callback){
       return Wiki.all({
          where: {
-            private: false
+            private: false, 
          }
       })
       .then((wikis) => {
@@ -30,7 +32,12 @@ module.exports = {
       	});
    	},
    	getWiki(id, callback) {
-      	return Wiki.findById(id)
+         return Wiki.findById(id,{
+            include: [
+            {model: Collaborator, as: "collaborators", include: [
+            {model: User}
+            ]},
+         ]})
       	.then((wiki) => {
          	callback(null, wiki);
       	})

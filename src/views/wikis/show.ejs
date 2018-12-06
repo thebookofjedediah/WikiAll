@@ -30,8 +30,19 @@
         <% } %>
       <% } %>
     <% } %>
-
       <p><%- wiki.body %></p>
+      <hr>
+
+      <h4>Collaborators on this Wiki</h4>
+      <% if(wiki.collaborators) { %>
+        <ul>
+          <% wiki.collaborators.forEach((collaborator) => { %>
+            <li>
+              <p> <%= collaborator.User.name %> </p>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
    </main>
    
    <%- include('../static/partials/baseScripts.ejs') -%>
