@@ -26,7 +26,7 @@ module.exports = {
 		.then((collaborator) => {
 			console.log(req.body.id);
 			if(!collaborator){
-				Collaborator.crete({
+				Collaborator.create({
 					wikiId: req.params.wikiId,
 					userId: req.body.id
 				})
@@ -65,7 +65,7 @@ module.exports = {
 					callback(err);
 				});
 			} else {
-				console("Error for removing the collaborator");
+				console.log("Error for removing the collaborator");
 				callback("error", "Collaborator is no longer on this wiki");
 			}
 		})
