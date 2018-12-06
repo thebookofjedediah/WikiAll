@@ -3,41 +3,54 @@ const Authorizer = require("../policies/wiki")
 const markdown = require( "markdown" ).markdown;
 
 module.exports = {
+   
 	index(req, res, next){
-      if(req.user){
-         if(req.user.role == 1 || req.user.role == 2 ||) {
-            wikiQueries.getAllWikis((err, wikis) => {
-               if(err){
-                  res.redirect(500, "static/index");
-               } else{
-                  wikis.forEach((wiki) => {
-                     wiki.title = markdown.toHTML(wiki.title);
-                     wiki.body = markdown.toHTML(wiki.body);
-                })
-                  res.render("wikis/index", {wikis});
-               }
-            })
-         } else{
-            wikiQueries.getPublicWikis((err, wikis) => {
-               if(err){
-                  res.redirect(500, "static/index");
-               } else{
-                  res.render("wikis/index", {wikis});
-               }
-            })
-         }
-      }
-      wikiQueries.getPublicWikis((err, wikis) => {
-         if(err){
+      wikiQueries.getAllWikis((err, wikis) => {
+         if(err) {
             res.redirect(500, "static/index");
-         } else{
-            res.render("wikis/index", {wikis});
+         } else {
+            wikis.forEach((wiki) => {
+               wiki.title = markdown.toHTML(wiki.title);
+               wiki.body = markdown.toHTML(wiki.body);
+            })
+         res.render("wikis/index", {wikis});
          }
       })
-   },
+   },   
+ //      if(req.user) {
+ //         if(req.user.role == 1 || req.user.role == 2) {
+ //            wikiQueries.getAllWikis((err, wikis) => {
+ //               if(err) {
+ //                  res.redirect(500, "static/index");
+ //               } else {
+ //                  wikis.forEach((wiki) => {
+ //                     wiki.title = markdown.toHTML(wiki.title);
+ //                     wiki.body = markdown.toHTML(wiki.body);
+ //                })
+ //                  res.render("wikis/index", {wikis});
+ //               }
+ //            })
+ //         } else {
+ //            wikiQueries.getPublicWikis((err, wikis) => {
+ //               if(err){
+ //                  res.redirect(500, "static/index");
+ //               } else{
+ //                  res.render("wikis/index", {wikis});
+ //               }
+ //            })
+ //         }
+ //      }
+ //      wikiQueries.getPublicWikis((err, wikis) => {
+ //         if(err) {
+ //            res.redirect(500, "static/index");
+ //         } else{
+ //            res.render("wikis/index", {wikis});
+ //         }
+ //      })
+ //   },
    new(req, res, next) { 
       const authorized = new Authorizer(req.user).new();
-      if(authorized){
+      if(authorized) {
          res.render("wikis/new");
       } else {
          req.flash("notice", "You are not authorized to do that.");

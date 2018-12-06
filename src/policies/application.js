@@ -19,6 +19,14 @@ module.exports = class ApplicationPolicy {
     return this.user && this.user.role == 2;
   }
 
+  _isCollaborator() {
+    return (
+      this.record.collaborators[0] && this.record.collaborators.find(collaborator => {
+        return this.user.id == collaborator.userId;
+      })
+    );
+  }
+
   _isPrivate() {
     return this.record && this.record.private == true;
   }
