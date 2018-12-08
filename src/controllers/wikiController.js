@@ -3,20 +3,77 @@ const Authorizer = require("../policies/wiki")
 const markdown = require( "markdown" ).markdown;
 
 module.exports = {
-   
-	index(req, res, next){
-      wikiQueries.getAllWikis((err, wikis) => {
-         if(err) {
-            res.redirect(500, "static/index");
-         } else {
-            wikis.forEach((wiki) => {
-               wiki.title = markdown.toHTML(wiki.title);
-               wiki.body = markdown.toHTML(wiki.body);
-            })
-         res.render("wikis/index", {wikis});
-         }
-      })
+   index(req, res, next) {
+      if(req.user){
+         let userWikis = [];
+         wikiQueries.getAllWikis((err, wikis) => {
+            if(err){
+               res.redirect(500, "static/index");
+            } else {
+               wikis.forEach(wiki => {
+                  if(wiki.private) {
+                     if(wiki.collaborators.length !==0 ) {
+                        wiki.collaborators.forEach(collaborator => {
+                           if(collaborator.userId == req.user.id && wiki.id == collaborator.wikiId || req.user.role == 2 || req.user.id == wiki.userId) {
+                              userWikis.push(wiki)
+                           }
+                        })
+                     } else {
+                        if(req.user.role == 2 || req.user.id == wiki.userId){
+                           userWikis.push(wiki)
+                        }
+                     } 
+                  } else {
+                     userWikis.push(wiki)
+                  }
+               });
+               res.render("wikis/index", {userWikis});
+            }
+         })
+      } else {
+         let userWikis = [];
+         wikiQueries.getPublicWikis((err, wikis) => {
+            if(err) {
+               res.redirect(500, "static/index");
+            } else {
+               userWikis = wikis;
+               res.render("wikis/index", {userWikis});
+            }
+         })
+      }
    },   
+	// index(req, res, next){
+ //      if(req.user){
+ //      if(req.user.role == 1 || req.user.role == 2){
+ //         wikiQueries.getAllWikis((err, wikis) => {
+ //            if(err) {
+ //               res.redirect(500, "static/index");
+ //            } else {
+ //               wikis.forEach((wiki) => {
+ //                  wiki.title = markdown.toHTML(wiki.title);
+ //                  wiki.body = markdown.toHTML(wiki.body);
+ //               })
+ //            res.render("wikis/index", {wikis});
+ //            }
+ //         })
+ //      } else if (req.user.role == 0) {
+ //         wikiQueries.getPublicWikis((err, wikis) => {
+ //            if(err) {
+ //               res.redirect(500, "static/index");
+ //            } else {
+ //               res.render("wikis/index", {wikis});
+ //            }
+ //         })
+ //      }
+ //   }
+ //      wikiQueries.getPublicWikis((err, wikis) => {
+ //         if(err) {
+ //            res.redirect(500, "static/index");
+ //         } else{
+ //            res.render("wikis/index", {wikis});
+ //         }
+ //      })
+ //   },   
  //      if(req.user) {
  //         if(req.user.role == 1 || req.user.role == 2) {
  //            wikiQueries.getAllWikis((err, wikis) => {

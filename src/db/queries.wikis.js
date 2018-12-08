@@ -3,17 +3,12 @@ const Collaborator = require("./models").Collaborator;
 const User = require("./models").User;
 
 module.exports = {
-	getAllWikis(callback){
-		return Wiki.all()
-		.then((wikis) => {
-			callback(null, wikis);
-		});
-	},
-   getPublicWikis(callback){
+   getAllWikis(callback) {
       return Wiki.all({
-         where: {
-            private: false, 
-         }
+         include: [{
+            model: Collaborator,
+            as: "collaborators"
+         }]
       })
       .then((wikis) => {
          callback(null, wikis);
@@ -22,6 +17,58 @@ module.exports = {
          callback(err);
       });
    },
+   getPublicWikis(callback) {
+      return Wiki.all({
+         where: { private: false},
+         include: [{
+            model: Collaborator, 
+            as: "collaborators", 
+         }],
+      })
+      .then((wikis) => {
+         callback(null, wikis);
+      })
+      .catch((err) => {
+         callback(err);
+      });
+   },
+	// getAllWikis(callback){
+	// 	return Wiki.all()
+	// 	.then((wikis) => {
+	// 		callback(null, wikis);
+	// 	});
+	// },
+   // getCollabWikis(callback){
+   //    return Wiki.all({
+   //       include: [{
+   //          model: Collaborator,
+   //          as: "collaborators",
+   //          attributes: ["userId"]
+   //       },
+   //    ]})
+   //    .then((wikis) => {
+   //       callback(null, wikis);
+   //    });
+   // },
+   // getPublicWikis(callback){
+   //    return Wiki.all({
+   //       include: [{
+   //          model: Collaborator, 
+   //          as: "collaborators", 
+   //          attributes: ["userId"]
+   //          }
+   //       ],
+   //       where: {
+   //          private: false, 
+   //       },
+   //    })
+   //    .then((wikis) => {
+   //       callback(null, wikis);
+   //    })
+   //    .catch((err) => {
+   //       callback(err);
+   //    });
+   // },
 	addWiki(newWiki, callback) {
       	return Wiki.create(newWiki)
       	.then((wiki) => {

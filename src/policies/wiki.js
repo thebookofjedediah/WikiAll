@@ -7,7 +7,7 @@ module.exports = class TopicPolicy extends ApplicationPolicy {
   }
 
   edit() {
-    return this._isAdmin() || this._isOwner() || this._isPremium();
+    return this._isAdmin() || this._isOwner() || this._isPremium() || this._isCollaborator();
   }
 
   update() {
